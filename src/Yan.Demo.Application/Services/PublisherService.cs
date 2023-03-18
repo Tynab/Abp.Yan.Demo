@@ -1,10 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.EventBus.Distributed;
-using Yan.Demo.Eto;
-using Yan.Demo.Request;
-using Yan.Demo.Service;
+using Yan.Demo.Etos;
+using Yan.Demo.Requests;
 
-namespace Yan.Demo.Implement;
+namespace Yan.Demo.Services;
 
 public class PublisherService : DemoAppService, IPublisherService
 {

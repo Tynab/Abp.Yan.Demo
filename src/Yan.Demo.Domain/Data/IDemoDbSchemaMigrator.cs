@@ -4,5 +4,5 @@ namespace Yan.Demo.Data;
 
 public interface IDemoDbSchemaMigrator
 {
-    Task MigrateAsync();
+    public Task MigrateAsync();
 }

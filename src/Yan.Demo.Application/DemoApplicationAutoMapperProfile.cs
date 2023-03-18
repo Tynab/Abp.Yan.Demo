@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Yan.Demo.Eto;
-using Yan.Demo.Request;
+using Yan.Demo.Etos;
+using Yan.Demo.Requests;
 
 namespace Yan.Demo;
 

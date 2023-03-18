@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
-using Yan.Demo.Request;
+using Yan.Demo.Requests;
 
-namespace Yan.Demo.Service;
+namespace Yan.Demo.Services;
 
 public interface IPublisherService : IApplicationService
 {

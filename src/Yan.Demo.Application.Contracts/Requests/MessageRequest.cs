@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Yan.Demo.Request;
+namespace Yan.Demo.Requests;
 
 public class MessageRequest
 {

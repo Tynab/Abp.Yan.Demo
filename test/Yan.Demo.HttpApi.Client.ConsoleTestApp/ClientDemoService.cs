@@ -1,25 +1,28 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Volo.Abp.Account;
 using Volo.Abp.DependencyInjection;
+using static System.Console;
 
 namespace Yan.Demo.HttpApi.Client.ConsoleTestApp;
 
 public class ClientDemoService : ITransientDependency
 {
+    #region Fields
     private readonly IProfileAppService _profileAppService;
+    #endregion
 
-    public ClientDemoService(IProfileAppService profileAppService)
-    {
-        _profileAppService = profileAppService;
-    }
+    #region Constructors
+    public ClientDemoService(IProfileAppService profileAppService) => _profileAppService = profileAppService;
+    #endregion
 
+    #region Methods
     public async Task RunAsync()
     {
         var output = await _profileAppService.GetAsync();
-        Console.WriteLine($"UserName : {output.UserName}");
-        Console.WriteLine($"Email    : {output.Email}");
-        Console.WriteLine($"Name     : {output.Name}");
-        Console.WriteLine($"Surname  : {output.Surname}");
+        WriteLine($"UserName : {output.UserName}");
+        WriteLine($"Email    : {output.Email}");
+        WriteLine($"Name     : {output.Name}");
+        WriteLine($"Surname  : {output.Surname}");
     }
+    #endregion
 }

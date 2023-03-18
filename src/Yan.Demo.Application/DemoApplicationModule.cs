@@ -21,11 +21,5 @@ namespace Yan.Demo;
     )]
 public class DemoApplicationModule : AbpModule
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddMaps<DemoApplicationModule>();
-        });
-    }
+    public override void ConfigureServices(ServiceConfigurationContext context) => Configure<AbpAutoMapperOptions>(o => o.AddMaps<DemoApplicationModule>());
 }

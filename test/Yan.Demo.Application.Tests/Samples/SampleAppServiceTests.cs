@@ -5,28 +5,25 @@ using Xunit;
 
 namespace Yan.Demo.Samples;
 
-/* This is just an example test class.
- * Normally, you don't test code of the modules you are using
- * (like IIdentityUserAppService here).
- * Only test your own application services.
- */
 public class SampleAppServiceTests : DemoApplicationTestBase
 {
+    #region Fields
     private readonly IIdentityUserAppService _userAppService;
+    #endregion
 
-    public SampleAppServiceTests()
-    {
-        _userAppService = GetRequiredService<IIdentityUserAppService>();
-    }
+    #region Constructors
+    public SampleAppServiceTests() => _userAppService = GetRequiredService<IIdentityUserAppService>();
+    #endregion
 
+    #region Methods
     [Fact]
     public async Task Initial_Data_Should_Contain_Admin_User()
     {
         //Act
         var result = await _userAppService.GetListAsync(new GetIdentityUsersInput());
-
         //Assert
         result.TotalCount.ShouldBeGreaterThan(0);
         result.Items.ShouldContain(u => u.UserName == "admin");
     }
+    #endregion
 }

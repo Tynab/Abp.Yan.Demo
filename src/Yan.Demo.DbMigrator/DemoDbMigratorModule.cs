@@ -1,6 +1,6 @@
-﻿using Yan.Demo.EntityFrameworkCore;
-using Volo.Abp.Autofac;
+﻿using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
+using Yan.Demo.EntityFrameworkCore;
 
 namespace Yan.Demo.DbMigrator;
 
@@ -9,7 +9,4 @@ namespace Yan.Demo.DbMigrator;
     typeof(DemoEntityFrameworkCoreModule),
     typeof(DemoApplicationContractsModule)
     )]
-public class DemoDbMigratorModule : AbpModule
-{
-
-}
+public class DemoDbMigratorModule : AbpModule { }

@@ -22,42 +22,27 @@ public class DemoEntityFrameworkCoreTestModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddAlwaysDisableUnitOfWorkTransaction();
+        _ = context.Services.AddAlwaysDisableUnitOfWorkTransaction();
         ConfigureInMemorySqlite(context.Services);
     }
 
     private void ConfigureInMemorySqlite(IServiceCollection services)
     {
         _sqliteConnection = CreateDatabaseAndGetConnection();
-
-        services.Configure<AbpDbContextOptions>(options =>
-        {
-            options.Configure(context =>
-            {
-                context.DbContextOptions.UseSqlite(_sqliteConnection);
-            });
-        });
+        _ = services.Configure<AbpDbContextOptions>(o => o.Configure(c => c.DbContextOptions.UseSqlite(_sqliteConnection)));
     }
 
-    public override void OnApplicationShutdown(ApplicationShutdownContext context)
-    {
-        _sqliteConnection.Dispose();
-    }
+    public override void OnApplicationShutdown(ApplicationShutdownContext context) => _sqliteConnection.Dispose();
 
     private static SqliteConnection CreateDatabaseAndGetConnection()
     {
         var connection = new SqliteConnection("Data Source=:memory:");
         connection.Open();
-
-        var options = new DbContextOptionsBuilder<DemoDbContext>()
-            .UseSqlite(connection)
-            .Options;
-
+        var options = new DbContextOptionsBuilder<DemoDbContext>().UseSqlite(connection).Options;
         using (var context = new DemoDbContext(options))
         {
             context.GetService<IRelationalDatabaseCreator>().CreateTables();
         }
-
         return connection;
     }
 }

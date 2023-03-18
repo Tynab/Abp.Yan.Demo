@@ -1,15 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using static System.Threading.Tasks.Task;
 
 namespace Yan.Demo.Data;
 
-/* This is used if database provider does't define
- * IDemoDbSchemaMigrator implementation.
- */
 public class NullDemoDbSchemaMigrator : IDemoDbSchemaMigrator, ITransientDependency
 {
-    public Task MigrateAsync()
-    {
-        return Task.CompletedTask;
-    }
+    public Task MigrateAsync() => CompletedTask;
 }

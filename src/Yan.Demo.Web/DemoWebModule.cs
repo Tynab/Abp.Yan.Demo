@@ -26,7 +26,6 @@ using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
 using Yan.Demo.EntityFrameworkCore;
 using Yan.Demo.Localization;
-using Yan.Demo.Web.Extensions;
 using Yan.Demo.Web.Menus;
 using static OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreDefaults;
 using static System.IO.Path;
@@ -53,7 +52,7 @@ public class DemoWebModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options => options.AddAssemblyResource(
+        _ = context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(o => o.AddAssemblyResource(
             typeof(DemoResource),
             typeof(DemoDomainModule).Assembly,
             typeof(DemoDomainSharedModule).Assembly,
@@ -61,108 +60,95 @@ public class DemoWebModule : AbpModule
             typeof(DemoApplicationContractsModule).Assembly,
             typeof(DemoWebModule).Assembly
             ));
-
-        PreConfigure<OpenIddictBuilder>(builder => builder.AddValidation(options =>
+        PreConfigure<OpenIddictBuilder>(o => o.AddValidation(b =>
         {
-            _ = options.AddAudiences("Demo");
-            _ = options.UseLocalServer();
-            _ = options.UseAspNetCore();
+            _ = b.AddAudiences("Demo");
+            _ = b.UseLocalServer();
+            _ = b.UseAspNetCore();
         }));
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        var hostingEnvironment = context.Services.GetHostingEnvironment();
-        var configuration = context.Services.GetConfiguration();
-
+        var services = context.Services;
         ConfigureAuthentication(context);
-        ConfigureUrls(configuration);
+        ConfigureUrls(services.GetConfiguration());
         ConfigureBundles();
         ConfigureAutoMapper();
-        ConfigureVirtualFileSystem(hostingEnvironment);
+        ConfigureVirtualFileSystem(services.GetHostingEnvironment());
         ConfigureNavigationServices();
         ConfigureAutoApiControllers();
-        ConfigureSwaggerServices(context.Services);
+        ConfigureSwaggerServices(services);
     }
 
     private static void ConfigureAuthentication(ServiceConfigurationContext context) => context.Services.ForwardIdentityAuthenticationForBearer(AuthenticationScheme);
 
-    private void ConfigureUrls(IConfiguration configuration) => Configure<AppUrlOptions>(options => options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"]);
+    private void ConfigureUrls(IConfiguration configuration) => Configure<AppUrlOptions>(o => o.Applications["MVC"].RootUrl = configuration["App:SelfUrl"]);
 
-    private void ConfigureBundles() => Configure<AbpBundlingOptions>(options => options.StyleBundles.Configure(Global, bundle => bundle.AddFiles("/global-styles.css")));
+    private void ConfigureBundles() => Configure<AbpBundlingOptions>(o => o.StyleBundles.Configure(Global, c => c.AddFiles("/global-styles.css")));
 
-    private void ConfigureAutoMapper() => Configure<AbpAutoMapperOptions>(options => options.AddMaps<DemoWebModule>());
+    private void ConfigureAutoMapper() => Configure<AbpAutoMapperOptions>(o => o.AddMaps<DemoWebModule>());
 
     private void ConfigureVirtualFileSystem(IWebHostEnvironment hostingEnvironment)
     {
         if (hostingEnvironment.IsDevelopment())
         {
-            Configure<AbpVirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(o =>
             {
-                options.FileSets.ReplaceEmbeddedByPhysical<DemoDomainSharedModule>(Combine(hostingEnvironment.ContentRootPath, $"..{DirectorySeparatorChar}Yan.Demo.Domain.Shared"));
-                options.FileSets.ReplaceEmbeddedByPhysical<DemoDomainModule>(Combine(hostingEnvironment.ContentRootPath, $"..{DirectorySeparatorChar}Yan.Demo.Domain"));
-                options.FileSets.ReplaceEmbeddedByPhysical<DemoApplicationContractsModule>(Combine(hostingEnvironment.ContentRootPath, $"..{DirectorySeparatorChar}Yan.Demo.Application.Contracts"));
-                options.FileSets.ReplaceEmbeddedByPhysical<DemoApplicationModule>(Combine(hostingEnvironment.ContentRootPath, $"..{DirectorySeparatorChar}Yan.Demo.Application"));
-                options.FileSets.ReplaceEmbeddedByPhysical<DemoWebModule>(hostingEnvironment.ContentRootPath);
+                var path = hostingEnvironment.ContentRootPath;
+                var prefix = $"..{DirectorySeparatorChar}Yan.Demo.";
+                o.FileSets.ReplaceEmbeddedByPhysical<DemoDomainSharedModule>(Combine(path, $"{prefix}Domain.Shared"));
+                o.FileSets.ReplaceEmbeddedByPhysical<DemoDomainModule>(Combine(path, $"{prefix}Domain"));
+                o.FileSets.ReplaceEmbeddedByPhysical<DemoApplicationContractsModule>(Combine(path, $"{prefix}Application.Contracts"));
+                o.FileSets.ReplaceEmbeddedByPhysical<DemoApplicationModule>(Combine(path, $"{prefix}Application"));
+                o.FileSets.ReplaceEmbeddedByPhysical<DemoWebModule>(path);
             });
         }
     }
 
-    private void ConfigureNavigationServices() => Configure<AbpNavigationOptions>(options => options.MenuContributors.Add(new DemoMenuContributor()));
+    private void ConfigureNavigationServices() => Configure<AbpNavigationOptions>(o => o.MenuContributors.Add(new DemoMenuContributor()));
 
-    private void ConfigureAutoApiControllers() => Configure<AbpAspNetCoreMvcOptions>(options => options.ConventionalControllers.Create(typeof(DemoApplicationModule).Assembly));
+    private void ConfigureAutoApiControllers() => Configure<AbpAspNetCoreMvcOptions>(o => o.ConventionalControllers.Create(typeof(DemoApplicationModule).Assembly));
 
-    private static void ConfigureSwaggerServices(IServiceCollection services) => services.AddAbpSwaggerGen(options =>
+    private static void ConfigureSwaggerServices(IServiceCollection services) => services.AddAbpSwaggerGen(o =>
     {
-        options.SwaggerDoc("v1", new OpenApiInfo
+        o.SwaggerDoc("v1", new OpenApiInfo
         {
             Title = "Demo API",
             Version = "v1"
         });
-        options.DocInclusionPredicate((docName, description) => true);
-        options.CustomSchemaIds(type => type.FullName);
+        o.DocInclusionPredicate((docName, description) => true);
+        o.CustomSchemaIds(t => t.FullName);
     });
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
-
         if (env.IsDevelopment())
         {
             _ = app.UseDeveloperExceptionPage();
         }
-
         _ = app.UseAbpRequestLocalization();
-
         if (!env.IsDevelopment())
         {
             _ = app.UseErrorPage();
         }
-
         _ = app.UseCorrelationId();
         _ = app.UseStaticFiles();
         _ = app.UseRouting();
         _ = app.UseAuthentication();
         _ = app.UseAbpOpenIddictValidation();
-
         if (IsEnabled)
         {
             _ = app.UseMultiTenancy();
         }
-
         _ = app.UseUnitOfWork();
         _ = app.UseAuthorization();
         _ = app.UseSwagger();
-        _ = app.UseAbpSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "Demo API"));
+        _ = app.UseAbpSwaggerUI(o => o.SwaggerEndpoint("/swagger/v1/swagger.json", "Demo API"));
         _ = app.UseAuditing();
         _ = app.UseAbpSerilogEnrichers();
         _ = app.UseConfiguredEndpoints();
-    }
-
-    public override void Configure(IApplicationBuilder app)
-    {
-        app.UseDemoModuleExceptionHandler();
-        base.Configure(app);
     }
 }

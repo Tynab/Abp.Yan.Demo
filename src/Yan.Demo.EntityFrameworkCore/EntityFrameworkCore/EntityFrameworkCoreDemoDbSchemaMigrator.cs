@@ -1,34 +1,23 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Yan.Demo.Data;
+using System;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Yan.Demo.Data;
 
 namespace Yan.Demo.EntityFrameworkCore;
 
-public class EntityFrameworkCoreDemoDbSchemaMigrator
-    : IDemoDbSchemaMigrator, ITransientDependency
+public class EntityFrameworkCoreDemoDbSchemaMigrator : IDemoDbSchemaMigrator, ITransientDependency
 {
+    #region Fields
     private readonly IServiceProvider _serviceProvider;
+    #endregion
 
-    public EntityFrameworkCoreDemoDbSchemaMigrator(
-        IServiceProvider serviceProvider)
-    {
-        _serviceProvider = serviceProvider;
-    }
+    #region Constructors
+    public EntityFrameworkCoreDemoDbSchemaMigrator(IServiceProvider serviceProvider) => _serviceProvider = serviceProvider;
+    #endregion
 
-    public async Task MigrateAsync()
-    {
-        /* We intentionally resolving the DemoDbContext
-         * from IServiceProvider (instead of directly injecting it)
-         * to properly get the connection string of the current tenant in the
-         * current scope.
-         */
-
-        await _serviceProvider
-            .GetRequiredService<DemoDbContext>()
-            .Database
-            .MigrateAsync();
-    }
+    #region Implements
+    public async Task MigrateAsync() => await _serviceProvider.GetRequiredService<DemoDbContext>().Database.MigrateAsync();
+    #endregion
 }

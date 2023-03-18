@@ -1,8 +1,3 @@
-﻿using Volo.Abp;
+﻿namespace Yan.Demo.EntityFrameworkCore;
 
-namespace Yan.Demo.EntityFrameworkCore;
-
-public abstract class DemoEntityFrameworkCoreTestBase : DemoTestBase<DemoEntityFrameworkCoreTestModule>
-{
-
-}
+public abstract class DemoEntityFrameworkCoreTestBase : DemoTestBase<DemoEntityFrameworkCoreTestModule> { }

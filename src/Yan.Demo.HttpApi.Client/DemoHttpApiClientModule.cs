@@ -4,8 +4,8 @@ using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
-using Volo.Abp.TenantManagement;
 using Volo.Abp.SettingManagement;
+using Volo.Abp.TenantManagement;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Yan.Demo;
@@ -25,14 +25,7 @@ public class DemoHttpApiClientModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddHttpClientProxies(
-            typeof(DemoApplicationContractsModule).Assembly,
-            RemoteServiceName
-        );
-
-        Configure<AbpVirtualFileSystemOptions>(options =>
-        {
-            options.FileSets.AddEmbedded<DemoHttpApiClientModule>();
-        });
+        _ = context.Services.AddHttpClientProxies(typeof(DemoApplicationContractsModule).Assembly, RemoteServiceName);
+        Configure<AbpVirtualFileSystemOptions>(o => o.FileSets.AddEmbedded<DemoHttpApiClientModule>());
     }
 }

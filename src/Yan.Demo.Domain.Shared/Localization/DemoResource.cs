@@ -3,7 +3,4 @@
 namespace Yan.Demo.Localization;
 
 [LocalizationResourceName("Demo")]
-public class DemoResource
-{
-
-}
+public class DemoResource { }

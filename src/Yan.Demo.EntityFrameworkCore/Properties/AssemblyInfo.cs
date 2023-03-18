@@ -1,2 +1,2 @@
 ﻿using System.Runtime.CompilerServices;
-[assembly:InternalsVisibleToAttribute("Yan.Demo.EntityFrameworkCore.Tests")]
+[assembly: InternalsVisibleTo("Yan.Demo.EntityFrameworkCore.Tests")]

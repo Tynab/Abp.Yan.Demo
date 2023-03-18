@@ -1,5 +1,4 @@
-﻿using Yan.Demo.Localization;
-using Volo.Abp.AuditLogging;
+﻿using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
@@ -12,6 +11,7 @@ using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
+using Yan.Demo.Localization;
 
 namespace Yan.Demo;
 
@@ -23,7 +23,7 @@ namespace Yan.Demo;
     typeof(AbpOpenIddictDomainSharedModule),
     typeof(AbpPermissionManagementDomainSharedModule),
     typeof(AbpSettingManagementDomainSharedModule),
-    typeof(AbpTenantManagementDomainSharedModule)    
+    typeof(AbpTenantManagementDomainSharedModule)
     )]
 public class DemoDomainSharedModule : AbpModule
 {
@@ -35,24 +35,12 @@ public class DemoDomainSharedModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<AbpVirtualFileSystemOptions>(options =>
+        Configure<AbpVirtualFileSystemOptions>(o => o.FileSets.AddEmbedded<DemoDomainSharedModule>());
+        Configure<AbpLocalizationOptions>(o =>
         {
-            options.FileSets.AddEmbedded<DemoDomainSharedModule>();
+            o.Resources.Add<DemoResource>("en").AddBaseTypes(typeof(AbpValidationResource)).AddVirtualJson("/Localization/Demo");
+            o.DefaultResourceType = typeof(DemoResource);
         });
-
-        Configure<AbpLocalizationOptions>(options =>
-        {
-            options.Resources
-                .Add<DemoResource>("en")
-                .AddBaseTypes(typeof(AbpValidationResource))
-                .AddVirtualJson("/Localization/Demo");
-
-            options.DefaultResourceType = typeof(DemoResource);
-        });
-
-        Configure<AbpExceptionLocalizationOptions>(options =>
-        {
-            options.MapCodeNamespace("Demo", typeof(DemoResource));
-        });
+        Configure<AbpExceptionLocalizationOptions>(o => o.MapCodeNamespace("Demo", typeof(DemoResource)));
     }
 }

@@ -1,11 +1,10 @@
-using System.IO;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using Serilog.Events;
+using System.Threading.Tasks;
+using static Microsoft.Extensions.Hosting.Host;
+using static Serilog.Events.LogEventLevel;
 
 namespace Yan.Demo.DbMigrator;
 
@@ -15,27 +14,19 @@ class Program
     {
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Information()
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-            .MinimumLevel.Override("Volo.Abp", LogEventLevel.Warning)
+            .MinimumLevel.Override("Microsoft", Warning)
+            .MinimumLevel.Override("Volo.Abp", Warning)
 #if DEBUG
-                .MinimumLevel.Override("Yan.Demo", LogEventLevel.Debug)
+                .MinimumLevel.Override("Yan.Demo", Debug)
 #else
-                .MinimumLevel.Override("Yan.Demo", LogEventLevel.Information)
+                .MinimumLevel.Override("Yan.Demo", Information)
 #endif
                 .Enrich.FromLogContext()
-            .WriteTo.Async(c => c.File("Logs/logs.txt"))
-            .WriteTo.Async(c => c.Console())
+            .WriteTo.Async(x => x.File("Logs/logs.txt"))
+            .WriteTo.Async(x => x.Console())
             .CreateLogger();
-
         await CreateHostBuilder(args).RunConsoleAsync();
     }
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .AddAppSettingsSecretsJson()
-            .ConfigureLogging((context, logging) => logging.ClearProviders())
-            .ConfigureServices((hostContext, services) =>
-            {
-                services.AddHostedService<DbMigratorHostedService>();
-            });
+    public static IHostBuilder CreateHostBuilder(string[] args) => CreateDefaultBuilder(args).AddAppSettingsSecretsJson().ConfigureLogging((context, logging) => logging.ClearProviders()).ConfigureServices((hostContext, services) => services.AddHostedService<DbMigratorHostedService>());
 }

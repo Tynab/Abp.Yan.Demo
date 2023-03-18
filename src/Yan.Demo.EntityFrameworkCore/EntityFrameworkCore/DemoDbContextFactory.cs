@@ -1,33 +1,19 @@
-﻿using System;
-using System.IO;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using static System.IO.Directory;
+using static System.IO.Path;
+using static Yan.Demo.EntityFrameworkCore.DemoEfCoreEntityExtensionMappings;
 
 namespace Yan.Demo.EntityFrameworkCore;
 
-/* This class is needed for EF Core console commands
- * (like Add-Migration and Update-Database commands) */
 public class DemoDbContextFactory : IDesignTimeDbContextFactory<DemoDbContext>
 {
     public DemoDbContext CreateDbContext(string[] args)
     {
-        DemoEfCoreEntityExtensionMappings.Configure();
-
-        var configuration = BuildConfiguration();
-
-        var builder = new DbContextOptionsBuilder<DemoDbContext>()
-            .UseSqlServer(configuration.GetConnectionString("Default"));
-
-        return new DemoDbContext(builder.Options);
+        Configure();
+        return new DemoDbContext(new DbContextOptionsBuilder<DemoDbContext>().UseSqlServer(BuildConfiguration().GetConnectionString("Default")).Options);
     }
 
-    private static IConfigurationRoot BuildConfiguration()
-    {
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../Yan.Demo.DbMigrator/"))
-            .AddJsonFile("appsettings.json", optional: false);
-
-        return builder.Build();
-    }
+    private static IConfigurationRoot BuildConfiguration() => new ConfigurationBuilder().SetBasePath(Combine(GetCurrentDirectory(), "../Yan.Demo.DbMigrator/")).AddJsonFile("appsettings.json", optional: false).Build();
 }

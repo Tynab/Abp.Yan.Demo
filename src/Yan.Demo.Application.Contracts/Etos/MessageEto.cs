@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.EventBus;
 
-namespace Yan.Demo.Eto;
+namespace Yan.Demo.Etos;
 
 [EventName("yan.demo")]
 public class MessageEto

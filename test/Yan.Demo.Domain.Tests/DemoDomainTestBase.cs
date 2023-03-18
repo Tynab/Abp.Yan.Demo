@@ -1,6 +1,3 @@
 ﻿namespace Yan.Demo;
 
-public abstract class DemoDomainTestBase : DemoTestBase<DemoDomainTestModule>
-{
-
-}
+public abstract class DemoDomainTestBase : DemoTestBase<DemoDomainTestModule> { }

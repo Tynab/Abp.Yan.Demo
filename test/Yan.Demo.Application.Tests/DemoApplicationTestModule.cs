@@ -6,7 +6,4 @@ namespace Yan.Demo;
     typeof(DemoApplicationModule),
     typeof(DemoDomainTestModule)
     )]
-public class DemoApplicationTestModule : AbpModule
-{
-
-}
+public class DemoApplicationTestModule : AbpModule { }

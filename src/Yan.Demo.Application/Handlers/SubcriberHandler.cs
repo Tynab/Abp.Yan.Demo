@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Volo.Abp.EventBus.Distributed;
-using Yan.Demo.Eto;
-using Yan.Demo.Request;
+using Yan.Demo.Etos;
+using Yan.Demo.Requests;
 using static System.Text.Json.JsonSerializer;
 using static System.Threading.Tasks.Task;
 
-namespace Yan.Demo.Handler;
+namespace Yan.Demo.Handlers;
 
 public class SubcriberHandler : DemoAppService, IDistributedEventHandler<MessageEto>
 {

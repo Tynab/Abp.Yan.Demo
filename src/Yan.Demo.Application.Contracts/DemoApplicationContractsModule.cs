@@ -21,8 +21,5 @@ namespace Yan.Demo;
 )]
 public class DemoApplicationContractsModule : AbpModule
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
-    {
-        DemoDtoExtensions.Configure();
-    }
+    public override void PreConfigureServices(ServiceConfigurationContext context) => DemoDtoExtensions.Configure();
 }

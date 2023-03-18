@@ -9,35 +9,24 @@ using Xunit;
 
 namespace Yan.Demo.EntityFrameworkCore.Samples;
 
-/* This is just an example test class.
- * Normally, you don't test ABP framework code
- * (like default AppUser repository IRepository<AppUser, Guid> here).
- * Only test your custom repository methods.
- */
 public class SampleRepositoryTests : DemoEntityFrameworkCoreTestBase
 {
+    #region Fields
     private readonly IRepository<IdentityUser, Guid> _appUserRepository;
+    #endregion
 
-    public SampleRepositoryTests()
-    {
-        _appUserRepository = GetRequiredService<IRepository<IdentityUser, Guid>>();
-    }
+    #region Constructors
+    public SampleRepositoryTests() => _appUserRepository = GetRequiredService<IRepository<IdentityUser, Guid>>();
+    #endregion
 
+    #region Methods
     [Fact]
-    public async Task Should_Query_AppUser()
+    public async Task Should_Query_AppUser() => await WithUnitOfWorkAsync(async () =>
     {
-        /* Need to manually start Unit Of Work because
-         * FirstOrDefaultAsync should be executed while db connection / context is available.
-         */
-        await WithUnitOfWorkAsync(async () =>
-        {
-                //Act
-                var adminUser = await (await _appUserRepository.GetQueryableAsync())
-                .Where(u => u.UserName == "admin")
-                .FirstOrDefaultAsync();
-
-                //Assert
-                adminUser.ShouldNotBeNull();
-        });
-    }
+        //Act
+        var adminUser = await (await _appUserRepository.GetQueryableAsync()).Where(u => u.UserName == "admin").FirstOrDefaultAsync();
+        //Assert
+        _ = adminUser.ShouldNotBeNull();
+    });
+    #endregion
 }

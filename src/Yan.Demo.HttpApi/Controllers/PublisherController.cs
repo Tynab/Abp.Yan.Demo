@@ -1,14 +1,14 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
-using Yan.Demo.Request;
-using Yan.Demo.Service;
-using Yan.Demo.Validation;
+using Yan.Demo.Requests;
+using Yan.Demo.Services;
+using Yan.Demo.Validations;
 
 namespace Yan.Demo.Controllers;
 
 [Route("api/yan/demo/publisher")]
-public class PublisherController : IPublisherService
+public class PublisherController : DemoController
 {
     #region Fields
     private readonly IPublisherService _publisherService;
@@ -19,12 +19,16 @@ public class PublisherController : IPublisherService
     #endregion
 
     #region Implements
-    [HttpPost]
-    [Route("shoot")]
-    public async Task Shoot(MessageRequest request)
+    [HttpPost("shoot")]
+    public async Task<IActionResult> Shoot([FromBody] MessageRequest request)
     {
-        await new MessageValidator().ValidateAndThrowAsync(request);
+        var vldRslt = await new MessageValidator().ValidateAsync(request);
+        if (!vldRslt.IsValid)
+        {
+            return BadRequest(vldRslt.Errors.First().ErrorMessage);
+        }
         await _publisherService.Shoot(request);
+        return Ok();
     }
     #endregion
 }

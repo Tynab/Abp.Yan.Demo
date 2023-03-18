@@ -8,13 +8,7 @@ namespace Yan.Demo;
 
 public class DemoWebTestStartup
 {
-    public void ConfigureServices(IServiceCollection services)
-    {
-        services.AddApplication<DemoWebTestModule>();
-    }
+    public static void ConfigureServices(IServiceCollection services) => services.AddApplication<DemoWebTestModule>();
 
-    public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
-    {
-        app.InitializeApplication();
-    }
+    public static void Configure(IApplicationBuilder app) => app.InitializeApplication();
 }

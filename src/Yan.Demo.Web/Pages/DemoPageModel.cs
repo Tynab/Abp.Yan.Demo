@@ -1,14 +1,9 @@
-﻿using Yan.Demo.Localization;
-using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+﻿using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Yan.Demo.Localization;
 
 namespace Yan.Demo.Web.Pages;
 
-/* Inherit your PageModel classes from this class.
- */
 public abstract class DemoPageModel : AbpPageModel
 {
-    protected DemoPageModel()
-    {
-        LocalizationResourceType = typeof(DemoResource);
-    }
+    protected DemoPageModel() => LocalizationResourceType = typeof(DemoResource);
 }
