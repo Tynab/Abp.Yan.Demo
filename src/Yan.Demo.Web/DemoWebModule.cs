@@ -15,6 +15,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.EventBus.Kafka;
 using Volo.Abp.EventBus.RabbitMq;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
@@ -46,7 +47,8 @@ namespace Yan.Demo.Web;
     typeof(AbpTenantManagementWebModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpSwashbuckleModule),
-    typeof(AbpEventBusRabbitMqModule)
+    typeof(AbpEventBusRabbitMqModule),
+    typeof(AbpEventBusKafkaModule)
     )]
 public class DemoWebModule : AbpModule
 {

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Volo.Abp.EventBus.Distributed;
 using Yan.Demo.Etos;
 using Yan.Demo.Requests;
+using YANLib;
 using static System.Text.Json.JsonSerializer;
 using static System.Threading.Tasks.Task;
 
@@ -21,7 +22,9 @@ public class SubcriberHandler : DemoAppService, IDistributedEventHandler<Message
     #region Implements
     public Task HandleEventAsync(MessageEto eventData)
     {
-        _logger.LogInformation("SubcriberHandler: {ETO}", Serialize(ObjectMapper.Map<MessageEto, MessageRequest>(eventData)));
+        var dto = ObjectMapper.Map<MessageEto, MessageRequest>(eventData);
+        _logger.LogInformation("SubcriberHandler: {ETO}", Serialize(dto));
+        _logger.LogInformation("SubcriberHandler: {DTO}", Serialize(dto.ChangeTimeZoneAllProperties(0, 7)));
         return CompletedTask;
     }
     #endregion

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Yan.Demo.Requests;
 
@@ -9,4 +10,7 @@ public class MessageRequest
     [Required]
     public string Name { get; set; }
     public string Message { get; set; }
+    [Required]
+    public DateTime CreateDate { get; set; }
+    public DateTime? ExpirationDate { get; set; }
 }

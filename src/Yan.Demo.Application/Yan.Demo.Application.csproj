@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Tynab.YANLib" Version="1.0.5" />
     <PackageReference Include="Volo.Abp.Account.Application" Version="7.0.3" />
     <PackageReference Include="Volo.Abp.Identity.Application" Version="7.0.3" />
     <PackageReference Include="Volo.Abp.PermissionManagement.Application" Version="7.0.3" />
