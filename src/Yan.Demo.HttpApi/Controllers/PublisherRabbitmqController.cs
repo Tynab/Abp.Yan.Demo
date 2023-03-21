@@ -8,18 +8,18 @@ using Yan.Demo.Validations;
 namespace Yan.Demo.Controllers;
 
 [Route("api/yan/demo/publisher")]
-public class PublisherController : DemoController
+public class PublisherRabbitmqController : DemoController
 {
     #region Fields
-    private readonly IPublisherService _publisherService;
+    private readonly IPublisherRabbitmqService _service;
     #endregion
 
     #region Constructors
-    public PublisherController(IPublisherService publisherService) => _publisherService = publisherService;
+    public PublisherRabbitmqController(IPublisherRabbitmqService service) => _service = service;
     #endregion
 
     #region Implements
-    [HttpPost("shoot")]
+    [HttpPost("shoot-rabbitmq")]
     public async Task<IActionResult> Shoot([FromBody] MessageRequest request)
     {
         var vldRslt = await new MessageValidator().ValidateAsync(request);
@@ -27,7 +27,7 @@ public class PublisherController : DemoController
         {
             return BadRequest(vldRslt.Errors.First().ErrorMessage);
         }
-        await _publisherService.Shoot(request);
+        await _service.Shoot(request);
         return Ok();
     }
     #endregion

@@ -4,7 +4,7 @@ using Yan.Demo.Requests;
 
 namespace Yan.Demo.Services;
 
-public interface IPublisherService : IApplicationService
+public interface IPublisherRabbitmqService : IApplicationService
 {
     public Task Shoot(MessageRequest request);
 }

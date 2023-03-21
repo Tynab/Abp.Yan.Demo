@@ -1,18 +1,19 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.EventBus.Kafka;
 using Yan.Demo.Etos;
 using Yan.Demo.Requests;
 
 namespace Yan.Demo.Services;
 
-public class PublisherService : DemoAppService, IPublisherService
+public class PublisherKafkaService : DemoAppService, IPublisherKafkaService
 {
     #region Fields
-    private readonly IDistributedEventBus _distributedEventBus;
+    private readonly KafkaDistributedEventBus _distributedEventBus;
     #endregion
 
     #region Constructors
-    public PublisherService(IDistributedEventBus distributedEventBus) => _distributedEventBus = distributedEventBus;
+    public PublisherKafkaService(KafkaDistributedEventBus distributedEventBus) => _distributedEventBus = distributedEventBus;
     #endregion
 
     #region Implements

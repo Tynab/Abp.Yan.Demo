@@ -47,8 +47,8 @@ namespace Yan.Demo.Web;
     typeof(AbpTenantManagementWebModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpSwashbuckleModule),
-    typeof(AbpEventBusRabbitMqModule),
-    typeof(AbpEventBusKafkaModule)
+    typeof(AbpEventBusKafkaModule),
+    typeof(AbpEventBusRabbitMqModule)
     )]
 public class DemoWebModule : AbpModule
 {
