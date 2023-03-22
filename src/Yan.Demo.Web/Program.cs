@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using static Microsoft.AspNetCore.Builder.WebApplication;
 using static Serilog.Events.LogEventLevel;
+using static System.DateTime;
 
 namespace Yan.Demo.Web;
 
@@ -21,10 +22,9 @@ public class Program
 #endif
             .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Warning)
             .Enrich.FromLogContext()
-            .WriteTo.Async(c => c.File("Logs/logs.txt"))
+            .WriteTo.Async(c => c.File($"Logs/{Now:yyyy-MM-dd}.log"))
             .WriteTo.Async(c => c.Console())
             .CreateLogger();
-
         try
         {
             Log.Information("Starting web host.");
