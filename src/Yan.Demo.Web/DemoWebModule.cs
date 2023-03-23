@@ -17,6 +17,7 @@ using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.EventBus.Kafka;
 using Volo.Abp.EventBus.RabbitMq;
+using Volo.Abp.Http.Client;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.SettingManagement.Web;
@@ -48,7 +49,8 @@ namespace Yan.Demo.Web;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpEventBusKafkaModule),
-    typeof(AbpEventBusRabbitMqModule)
+    typeof(AbpEventBusRabbitMqModule),
+    typeof(AbpHttpClientModule)
     )]
 public class DemoWebModule : AbpModule
 {
